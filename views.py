@@ -15,15 +15,14 @@ def homeView(request) :
     return render(request, "home.html")
 
 
-
-def viewHomepage(request) :
-               
+def viewHomepage(request) :            
     return render(request, "index.html") 
 
 
 
 #User signUp
 def signUpView(request):
+    
     #Create user code
     if  request.method =='POST': 
         userName = request.POST.get('username')

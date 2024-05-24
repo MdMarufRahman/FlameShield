@@ -15,9 +15,29 @@ class report(models.Model) :
     cause = models.CharField(max_length=50)
     damage = models.CharField(max_length=50)
     comments = models.TextField()
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    
+class addRestaurentModel(models.Model) :
+    commpanyName = models.CharField(max_length=50)
+    issuedBy = models.CharField(max_length=50)
+    expiryDate = models.DateField()
+    message = models.TextField()
+    
+class picture(models.Model):
+    userName = models.TextField()
+    img = models.TextField()
 
 
+class TestUser(models.Model):
+    user=models.TextField()
+    img= models.TextField()
 
+class team(models.Model):
+    name = models.CharField(max_length=100)
+    
+class history(models.Model):
+    log = models.CharField(max_length=500)
 
 
 

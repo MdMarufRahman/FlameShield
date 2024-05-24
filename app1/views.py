@@ -19,6 +19,8 @@ def viewHomepage(request) :
                
     return render(request, "index.html") 
 
+
+
 #User signUp
 def signUpView(request):
     #Create user code
@@ -65,6 +67,7 @@ def dashboardView(request):
     return render(request, 'adminDashboard.html', args)
 
 
+
 #User Authentication
 def loginView(request) :
     if  request.method == 'POST' :
@@ -92,6 +95,7 @@ def loginView(request) :
     return render(request, "index.html")     
 
   
+
 #Contact Us Page
 def contactUs(request) : 
     if request.method =='POST' :
@@ -105,6 +109,7 @@ def contactUs(request) :
         return redirect('homepage')
         
     return render(request, "contact.html")
+
 
 
 #User Report
@@ -126,12 +131,17 @@ def reportView(request) :
     return render(request, "report.html")
 
 
+
+#About us
 def aboutView(request) :
     return render(request, "about.html")
 
 
+
+#Safety page
 def safetyView(request) :
     return render(request, "safety.html")
+
 
 
 #Adding Certification to User
@@ -143,6 +153,7 @@ def certificateView(request):
     return render(request, "certificate.html", args)
 
 
+
 #Adding Certification from Admin 
 def addRestaurentView(request):
     if request.method =='POST' :
@@ -150,10 +161,16 @@ def addRestaurentView(request):
         issue = request.POST.get('issuedBy')
         expiry = request.POST.get('expiryDate')
         message = request.POST.get('details')
+
+        #Exception handling
+        if not companyName or not issue or not expiry or not message:
+            return render(request, 'addRestaurent.html', {'error': 'All fields are required'})
+
         add = addRestaurentModel(commpanyName=companyName, issuedBy=issue, expiryDate=expiry, message=message)
         add.save()
         return redirect('dashboardView')
     return render(request, 'addRestaurent.html')
+
 
 
 #Contact Display
@@ -164,6 +181,8 @@ def displayContactView(request):
         "contacts": contacts,  
     }
     return render(request, "contactAdmin.html",args)
+
+
 
 #Contact Display
 def clickPicture(request):
@@ -181,6 +200,8 @@ def clickPicture(request):
            
     return render(request, "face.html")
 
+
+
 #GPS Tracking
 def map(request, slug):
     map_obj = get_object_or_404(report, id=slug)
@@ -192,7 +213,9 @@ def map(request, slug):
     google_maps_url += "&q=nearby river"
     return redirect(google_maps_url)
 
-#GPS Tracking
+
+
+#Team Login Track Button
 def map2(request, slug):
     map_obj = get_object_or_404(assignedTeam, id=slug)
     latitude = map_obj.latitude
@@ -208,8 +231,8 @@ def deleteContact(request, slug):
     certificate.delete()
 
         # Appending the search query for nearby lakes to the Google Maps URL
-    
     return redirect('displayContact')
+
 
 
 #Face Recognition Verification
@@ -239,6 +262,7 @@ def check(request):
         return HttpResponse("Access Denied. Face didnt match")   
 
 
+
 #Available Teams
 def addTeam(request):
     if request.method == 'POST':
@@ -253,6 +277,7 @@ def addTeam(request):
     return render(request, 'availableteam.html', {'teams': team.objects.all()}) 
 
 
+
 #Delete Team
 def deleteTeam(request, slug):
     delTeam = team.objects.get(id=slug)
@@ -261,12 +286,14 @@ def deleteTeam(request, slug):
     return redirect('addTeam')
 
 
+
 #Delete Certificate
 def deleteCertificate(request, slug):
     delCertificate = addRestaurentModel.objects.get(id=slug)
     delCertificate.delete()
 
     return redirect('dashboardView')
+
 
 
 #Search Bar
@@ -280,7 +307,7 @@ def searchReports(request):
         return render(request, 'search_form.html')
     
 
-#Resolving and Backlog
+
 #assigning the work to the teams
 def resolve(request, slug):
     delReport = report.objects.get(id=slug)
@@ -291,9 +318,6 @@ def resolve(request, slug):
                              delReport.comments,latitude=delReport.latitude,longitude=delReport.longitude)
         teams.save()
     
-    
-    
-    
     delTeam = team.objects.get(name=teamName)
     
     delTeam.delete()
@@ -302,10 +326,14 @@ def resolve(request, slug):
     
     return redirect('dashboardView')
 
+
+
+#History Backlog
 def log(request):
     log = history.objects.all()
     
     return render(request, 'log.html',{'log': log})
+
 
 
 #Team Completion
@@ -319,6 +347,9 @@ def teamLogin(request):
     }
     return render(request, 'team.html',args)
 
+
+
+#Team assignation notified
 def teamUpdate(request,slug):
     print(slug)
     teams = assignedTeam.objects.get(id=slug)
@@ -330,7 +361,7 @@ def teamUpdate(request,slug):
     
     current_date = datetime.date.today()
     current_time = datetime.datetime.now().time()
-    log = f"Date: {current_date}, Time: {current_time}, Team name: {teams.name}, solved the case report ID: {teams.id}, location: {teams.location} Comments: {teams.complete} WORK DONE"
+    log = f"Date: {current_date}, Time: {current_time}, Team name: {teams.name}, solved the case report ID: {teams.id}, location: {teams.location} Comments: {teams.complete} COMPLETED"
     history_entry = history(log=log)
     history_entry.save()
 

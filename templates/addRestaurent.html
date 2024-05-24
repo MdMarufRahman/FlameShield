@@ -54,12 +54,29 @@
     input[type="submit"]:hover {
       background-color: #45a049;
     }
+
+    /* Error message */
+    .error-message {
+            color: #ff0000; /* Bright red color */
+            background-color: #ffe6e6; /* Light red background */
+            border: 1px solid #ff0000; /* Red border */
+            padding: 10px; /* Padding around the text */
+            margin: 10px 0; /* Margin above and below the message */
+            border-radius: 5px; /* Rounded corners */
+            font-weight: bold; /* Bold text */
+            text-align: center; /* Center the text */
+        }
   </style>
 </head>
 <body>
 
 <div class="container">
   <h1>Fire Safety Certificate Clearance</h1>
+
+  {% if error %}
+        <div class="error-message">{{ error }}</div>
+    {% endif %}
+
   <form action="" method="POST">
     {% csrf_token %}
     <label for="company">Company Name</label>
@@ -77,6 +94,9 @@
     <input type="submit" value="Submit">
   </form>
 </div>
+
+
+
 
 </body>
 </html>

@@ -11,61 +11,6 @@ from .decorators import unauthenticated_user, admin_only
 
 # Create your views here.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def homeView(request) :
     return render(request, "home.html")
 

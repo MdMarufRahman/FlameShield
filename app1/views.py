@@ -10,6 +10,7 @@ from .decorators import unauthenticated_user, admin_only
 
 
 # Create your views here.
+
 def homeView(request) :
     return render(request, "home.html")
 
@@ -55,13 +56,21 @@ def safetyView(request) :
     return render(request, "safety.html")
 
 
-
-
-
-
+   #Search Bar
+def SearchReports(request):
+    if request.method == 'POST':
+        location_query = request.POST.get('q')
+        # Search for reports based on the provided location
+        reports = report.objects.filter(location__icontains=location_query)
+        return render(request, 'search_results.html', {'reports': reports})
+    else:
+        return render(request, 'search_form.html')
 
 
     
+
+
+
 
 
     

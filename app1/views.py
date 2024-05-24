@@ -11,17 +11,17 @@ from .decorators import unauthenticated_user, admin_only
 
 # Create your views here.
 
-def HomeView(request) :
+def homeView(request) :
     return render(request, "home.html")
 
 
 
-def ViewHomepage(request) :
+def hiewHomepage(request) :
                
     return render(request, "index.html") 
 
 #Admin Dashboard
-def DashBoardView(request):
+def dashboardView(request):
     
     reports = report.objects.filter()
     report_count= len(reports)
@@ -47,17 +47,17 @@ def DashBoardView(request):
     return render(request, 'adminDashboard.html', args)
     
 
-def AboutView(request) :
+def aboutView(request) :
     return render(request, "about.html")
 
 
 
-def SafetyView(request) :
+def safetyView(request) :
     return render(request, "safety.html")
 
 
    #Search Bar
-def SearchReports(request):
+def searchReports(request):
     if request.method == 'POST':
         location_query = request.POST.get('q')
         # Search for reports based on the provided location

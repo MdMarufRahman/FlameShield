@@ -20,7 +20,7 @@ def viewHomepage(request) :
     return render(request, "index.html") 
 
 #Admin Dashboard
-def DashBoardView(request):
+def dashboardView(request):
     
     reports = report.objects.filter()
     report_count= len(reports)

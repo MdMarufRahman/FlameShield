@@ -54,6 +54,7 @@ from .decorators import unauthenticated_user, admin_only
 
 
 
+
 def homeView(request) :
     return render(request, "home.html")
 

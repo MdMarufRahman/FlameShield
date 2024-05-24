@@ -41,7 +41,31 @@ def signUpView(request):
 
 
 
+#Admin Dashboard
+def dashboardView(request):
+    
+    reports = report.objects.filter()
+    report_count= len(reports)
+    all_users = User.objects.all()
+    user_count = len(all_users)
+    all_certificates = addRestaurentModel.objects.filter()
+    certificates_count = len(all_certificates)
+    restaurents = addRestaurentModel.objects.filter()
+    notification = contactUsModel.objects.filter()
+    notification_count = len(notification)
+    availableTeam = team.objects.filter()
+    
+    args = {
+        "reports": reports,
+        "report_count":report_count,
+        "user_count":user_count,
+        "certificates_count":certificates_count,
+        "restaurents":restaurents,
+        "notification_count":notification_count,
+        "availableTeam":availableTeam
 
+    }
+    return render(request, 'adminDashboard.html', args)
 
 
 
@@ -69,7 +93,19 @@ def loginView(request) :
 
   
 
-
+#Contact Us Page
+def contactUs(request) : 
+    if request.method =='POST' :
+        fullName = request.POST.get('full_name')
+        email = request.POST.get('email')
+        phoneNumber = request.POST.get('phone_number')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        en = contactUsModel(contactFullName=fullName, contactEmail=email, contactPhoneNumber=phoneNumber, contactSubject=subject, contactMessage=message)
+        en.save()
+        return redirect('homepage')
+        
+    return render(request, "contact.html")
 
 
 
@@ -98,6 +134,8 @@ def aboutView(request) :
 
 
 
+def safetyView(request) :
+    return render(request, "safety.html")
 
 
 
@@ -130,9 +168,32 @@ def addRestaurentView(request):
 
 
 
+#Contact Display
+def displayContactView(request):
+    contacts = contactUsModel.objects.filter()
+    
+    args = {
+        "contacts": contacts,  
+    }
+    return render(request, "contactAdmin.html",args)
 
 
 
+#Contact Display
+def clickPicture(request):
+    last_object =User.objects.latest('id') 
+    last_object_user=last_object.username
+    
+    if request.method=="POST":
+        img=request.POST.get("img_data")
+        picture_obj = picture.objects.create(
+            userName=last_object_user,
+            img=img
+        )
+        picture_obj.save()
+        return redirect('home')
+           
+    return render(request, "face.html")
 
 
 
@@ -147,10 +208,60 @@ def map(request, slug):
     google_maps_url += "&q=nearby river"
     return redirect(google_maps_url)
     
+def deleteContact(request, slug):
+    certificate = contactUsModel.objects.get(id=slug)
+    certificate.delete()
+
+        # Appending the search query for nearby lakes to the Google Maps URL
+    
+    return redirect('displayContact')
 
 
+#Face Recognition Verification
+def faceRecog(request):
+    if request.method=="POST":
+          
+    
+        return redirect(f"/check/")
+    return render(request,'faceRecog.html')
+
+def check(request):
+   
+    db = picture.objects.get(userName=request.user)
+    db_img=db.img
+    dbu=db.userName
+    temp = str(request.user)
+   
+    
+    db1 = TestUser.objects.get(user=temp)
+    db_img1=db1.img
+    dbu1=db1.user
+    
+    if dbu == dbu1 and db_img == db_img1:
+        print("ya")
+        return redirect(f"/home/")
+    else:
+        return HttpResponse("Access Denied. Face didnt match")   
 
 
+#Available Teams
+def addTeam(request):
+    if request.method == 'POST':
+        teamName = request.POST.get('name')  # Get the team name from the form
+        # Create a new Team instance and save it to the database
+        newTeam = team(name=teamName)
+        newTeam.save()
+        return redirect('addTeam')
+    
+    return render(request, 'availableteam.html', {'teams': team.objects.all()}) 
+
+
+#Delete Team
+def deleteTeam(request, slug):
+    delTeam = team.objects.get(id=slug)
+    delTeam.delete()
+
+    return redirect('addTeam')
 
 
 #Delete Certificate
@@ -161,7 +272,16 @@ def deleteCertificate(request, slug):
     return redirect('dashboardView')
 
 
-
+#Search Bar
+def searchReports(request):
+    if request.method == 'POST':
+        location_query = request.POST.get('q')
+        # Search for reports based on the provided location
+        reports = report.objects.filter(location__icontains=location_query)
+        return render(request, 'search_results.html', {'reports': reports})
+    else:
+        return render(request, 'search_form.html')
+    
 
 #Resolving and Backlog
 def resolve(request, slug):

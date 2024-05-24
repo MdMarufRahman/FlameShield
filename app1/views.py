@@ -71,7 +71,7 @@ def homeView(request) :
 
 
 
-def viewHomepage(request) :
+def hiewHomepage(request) :
                
     return render(request, "index.html") 
 
@@ -112,7 +112,7 @@ def safetyView(request) :
 
 
    #Search Bar
-def SearchReports(request):
+def searchReports(request):
     if request.method == 'POST':
         location_query = request.POST.get('q')
         # Search for reports based on the provided location

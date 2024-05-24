@@ -11,12 +11,12 @@ from .decorators import unauthenticated_user, admin_only
 
 # Create your views here.
 
-def homeView(request) :
+def HomeView(request) :
     return render(request, "home.html")
 
 
 
-def viewHomepage(request) :
+def ViewHomepage(request) :
                
     return render(request, "index.html") 
 
@@ -47,12 +47,12 @@ def DashBoardView(request):
     return render(request, 'adminDashboard.html', args)
     
 
-def aboutView(request) :
+def AboutView(request) :
     return render(request, "about.html")
 
 
 
-def safetyView(request) :
+def SafetyView(request) :
     return render(request, "safety.html")
 
 
